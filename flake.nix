@@ -26,11 +26,11 @@
       # Helper to create system configurations
       mkSystem = { hostName, extraModules ? [], isVM ? false }: nixpkgs.lib.nixosSystem {
         inherit system;
-        modules = [
-          if isVM then
-            ./hosts/vm.nix
+        modules = (if isVM then
+            [./hosts/vm.nix]
           else
-            ./hosts/base.nix
+            [./hosts/base.nix]) ++ [
+          
 #          ./hosts/${hostName}.nix
           home-manager.nixosModules.home-manager
           {
