@@ -74,16 +74,7 @@
         };
         vm = mkSystem {
           hostName = "vm";
-          extraModules = [
-            <nixpkgs/nixos/modules/virtualisation/qemu-vm.nix>
-            {
-              boot.loader.systemd-boot.enable = true;
-              boot.loader.efi.canTouchEfiVariables = true;
-              virtualisation.qemu.options = [
-                "-device virtio-vga"
-              ];
-            }
-          ];
+          isVM = true;
         };
         thinkpad = mkSystem {
           hostName = "thinkpad";
