@@ -24,10 +24,13 @@
       pkgs = nixpkgs.legacyPackages.${system};
 
       # Helper to create system configurations
-      mkSystem = { hostName, extraModules ? [] }: nixpkgs.lib.nixosSystem {
+      mkSystem = { hostName, extraModules ? [], isVM ? false }: nixpkgs.lib.nixosSystem {
         inherit system;
         modules = [
-          ./hosts/base.nix
+          if isVM then
+            ./hosts/vm.nix
+          else
+            ./hosts/base.nix
 #          ./hosts/${hostName}.nix
           home-manager.nixosModules.home-manager
           {
@@ -36,8 +39,8 @@
             home-manager.useUserPackages = true;
           }
         ] ++ extraModules;
-        specialArgs = { 
-		inherit inputs; 
+        specialArgs = {
+		inherit inputs;
 	        inherit (inputs) dotfiles;
 	};
       };
@@ -66,6 +69,19 @@
             nixos-wsl.nixosModules.wsl
             {
               wsl.enable = true;
+            }
+          ];
+        };
+        vm = mkSystem {
+          hostName = "vm";
+          extraModules = [
+            <nixpkgs/nixos/modules/virtualisation/qemu-vm.nix>
+            {
+              boot.loader.systemd-boot.enable = true;
+              boot.loader.efi.canTouchEfiVariables = true;
+              virtualisation.qemu.options = [
+                "-device virtio-vga"
+              ];
             }
           ];
         };

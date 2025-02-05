@@ -14,9 +14,10 @@
     XDG_CURRENT_DESKTOP = "sway";
   };
 
-#  security.pam.services.swaylock = {
-#    text = ''
-#      auth include login
-#    '';
- # };
+  programs.sway.enable = true;
+ security.pam.services.swaylock = {
+   text = ''
+     auth include login
+   '';
+ };
 }
