@@ -5,6 +5,7 @@
 
   imports = [
     ./default.nix
+    /etc/nixos/hardware-configuration.nix
     # <nixpkgs/nixos/modules/virtualisation/qemu-vm.nix>
   ];
 
