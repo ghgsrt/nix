@@ -1,6 +1,10 @@
 { config, lib, pkgs, inputs, dotfiles, ... }:
 
 {
+  imports = [
+	/etc/nixos/hardware-configuration.nix
+];
+
   boot = lib.mkDefault {
     loader = {
       efi = {
@@ -12,20 +16,19 @@
         efiInstallAsRemovable = true;
         device = "nodev";
         enableCryptodisk = true;
-        splashImage = null;
         useOSProber = true;
       };
       timeout = 5;
     };
 
-    #supportedFilesystems = ["ntfs"];
+    supportedFilesystems = ["ntfs"];
     tmp.useTmpfs = true;
   };
 
   time.timeZone = "America/New_York";
 
   networking = {
-    hostName = "base";
+#    hostName = "base";
     enableIPv6 = true;
     #extraHosts = builtins.readFile "${inputs.hosts}/hosts";
     #dhcpcd.enable = true;
@@ -45,23 +48,17 @@
 
   users.mutableUsers = false;
 
-  # users.users = {
-  #   "root" = {
-  #     hashedPassword = "$y$j9T$mFR8kp4N.GQjh.tDL/qeT0$CfRgPQznsg/b7LlVxyhP.gfxnue06eg0NjExvNM9x5A";
-  #     openssh.authorizedKeys.keys = [
-  #       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID99gQ/AgXhgwAjs+opsRXMbWpXFRT2aqAOUbN3DsrhQ (none)"
-  #     ];
-  #   };
+   users.users = {
+     "root" = {
+	password = "root";
+     };
 
-  #   "${user}" = {
-  #     isNormalUser = true;
-  #     extraGroups = ["wheel" "audio" "video"]; # Enable ‘sudo’ for the user.
-  #     hashedPassword = "$y$j9T$d5qK9GvtYnPtvqnsugvcD.$5rFA4lx46qqoME81rBrB5TpDL1XSOc1anTQDmQFsD04";
-  #     openssh.authorizedKeys.keys = [
-  #       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID99gQ/AgXhgwAjs+opsRXMbWpXFRT2aqAOUbN3DsrhQ (none)"
-  #     ];
-  #   };
-  # };
+     "bosco" = {
+       isNormalUser = true;
+       extraGroups = ["wheel" "audio" "video"]; # Enable ‘sudo’ for the user.
+       password = "bosco";
+     };
+   };
 
   environment.variables = {
     TERMINAL = "st";
@@ -86,7 +83,6 @@
 
   environment.systemPackages = with pkgs; [
     tmux
-    tpm
     git
 
     neovim
@@ -97,7 +93,6 @@
     usbutils
     pciutils
 
-    tar
     zip
     unzip
   ];
@@ -137,15 +132,15 @@
 
   hardware.enableRedistributableFirmware = true;
 
-  xdg = {
-    configFile."tmux/tmux.conf".source = "${dotfiles}/tmux.conf";
-    configFile."nvim/".source = "${dotfiles}/nvim/";
-    configFile."sway/config".source = "${dotfiles}/sway_config";
-    configFile."waybar/".source = "${dotfiles}/waybar/";
-    configFile."gtk-4.0/".source = "${dotfiles}/gtk-4.0/";
-  };
+#  xdg = {
+#    configFile."tmux/tmux.conf".source = "${dotfiles}/tmux.conf";
+#    configFile."nvim/".source = "${dotfiles}/nvim/";
+#    configFile."sway/".source = "${dotfiles}/sway/";
+#    configFile."waybar/".source = "${dotfiles}/waybar/";
+#    configFile."gtk-4.0/".source = "${dotfiles}/gtk-4.0/";
+#  };
 
-  xdg.userDirs.desktop = "$HOME/";
+#  xdg.userDirs.desktop = "$HOME/";
 
   environment.etc.tmux.source = "${dotfiles}/tmux";
 }

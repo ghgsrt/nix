@@ -18,7 +18,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, nixos-wsl, ... }@inputs:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
@@ -28,7 +28,7 @@
         inherit system;
         modules = [
           ./hosts/base.nix
-          ./hosts/${hostName}.nix
+#          ./hosts/${hostName}.nix
           home-manager.nixosModules.home-manager
           {
             networking.hostName = hostName;
@@ -36,10 +36,10 @@
             home-manager.useUserPackages = true;
           }
         ] ++ extraModules;
-        specialArgs = { inherit inputs; };
-        extraSpecialArgs = {
-          inherit (inputs) dotfiles;
-        };
+        specialArgs = { 
+		inherit inputs; 
+	        inherit (inputs) dotfiles;
+	};
       };
 
       # Helper to create home configurations
@@ -50,7 +50,7 @@
           ./home/${homeName}.nix
           {
             home = {
-              inherit username;
+              #inherit username;
               homeDirectory = "/home/shared";
               stateVersion = "23.11";
             };
