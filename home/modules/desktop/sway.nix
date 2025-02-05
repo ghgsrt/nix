@@ -1,4 +1,4 @@
-{ config, pkgs, inputs }: {
+{ config, pkgs, inputs, ... }: {
   imports = [
     ./wayland.nix
   ];
@@ -14,10 +14,9 @@
     XDG_CURRENT_DESKTOP = "sway";
   };
 
-  programs.sway.enable = true;
-  security.pam.services.swaylock = {
-    text = ''
-      auth include login
-    ''
-  };
+#  security.pam.services.swaylock = {
+#    text = ''
+#      auth include login
+#    '';
+ # };
 }

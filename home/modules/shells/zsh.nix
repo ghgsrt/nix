@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, dotfiles }: {
+{ config, pkgs, inputs, dotfiles, lib,... }: {
   programs = {
     bash = {
         enable = true;
