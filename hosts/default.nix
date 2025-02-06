@@ -8,8 +8,9 @@
     enableIPv6 = true;
     #extraHosts = builtins.readFile "${inputs.hosts}/hosts";
     #dhcpcd.enable = true;
+    networkmanager.enable = true;
     resolvconf.enable = true;
-    nameservers = ["127.0.0.1"];
+    nameservers = ["8.8.8.8"];
     firewall = {
       enable = true;
       allowedTCPPorts = [80 22 9090];
