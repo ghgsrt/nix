@@ -57,7 +57,7 @@
           ./home/${homeName}.nix
           {
             home = {
-              #inherit username;
+              inherit homeName;
               homeDirectory = "/home/shared";
               stateVersion = "23.11";
             };
