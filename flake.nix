@@ -24,19 +24,23 @@
       pkgs = nixpkgs.legacyPackages.${system};
 
       # Helper to create system configurations
-      mkSystem = { hostName, extraModules ? [], isVM ? false }: nixpkgs.lib.nixosSystem {
+      mkSystem = { hostName, extraModules ? [], isVM ? false, defaultHome ? "primary" }: nixpkgs.lib.nixosSystem {
         inherit system;
         modules = (if isVM then
             [./hosts/vm.nix]
           else
             [./hosts/base.nix]) ++ [
-          
 #          ./hosts/${hostName}.nix
           home-manager.nixosModules.home-manager
           {
             networking.hostName = hostName;
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              shared-modules = [
+                ./home/${defaultHome}.nix
+              ];
+            };
           }
         ] ++ extraModules;
         specialArgs = {
