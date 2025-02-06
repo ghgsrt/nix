@@ -3,7 +3,7 @@
     ./base.nix
   ];
 
-  home.packages = [
+  environment.systemPackages = [
     (pkgs.writeShellScriptBin "wayland-session" ''
       /run/current-system/systemd/bin/systemctl --user start graphical-session.target
       dbus-run-session "$@"
@@ -11,7 +11,7 @@
     '')
   ];
 
-  home.sessionVariables = {
+  environment.sessionVariables = {
     XDG_SESSION_TYPE = "wayland";
   };
 }

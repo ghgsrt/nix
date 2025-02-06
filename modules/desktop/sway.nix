@@ -3,14 +3,14 @@
     ./wayland.nix
   ];
 
-  home.packages = with pkgs; [
+  environment.systemPackages = with pkgs; [
     sway
     swaylock
     swayidle
     waybar
   ];
 
-  home.sessionVariables = {
+  environment.sessionVariables = {
     XDG_CURRENT_DESKTOP = "sway";
   };
 
