@@ -1,6 +1,10 @@
 { config, lib, pkgs, inputs, dotfiles, ... }:
 
 {
+	imports = [
+		../modules/desktop/sway.nix
+	];
+
   time.timeZone = "America/New_York";
 
   networking = {
