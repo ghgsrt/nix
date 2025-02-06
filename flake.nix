@@ -37,7 +37,7 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              shared-modules = [
+              sharedModules = [
                 ./home/${defaultHome}.nix
               ];
             };
