@@ -2,8 +2,8 @@
   programs = {
     bash = {
         enable = true;
-        bashrcExtra = builtins.readFile "${dotfiles}/.bashrc";
-        profileExtra = builtins.readFile "${dotfiles}/.bash_profile";
+#        bashrcExtra = builtins.readFile "${dotfiles}/.bashrc";
+ #       profileExtra = builtins.readFile "${dotfiles}/.bash_profile";
       };
 
       zsh = {

@@ -50,14 +50,15 @@
       };
 
       # Helper to create home configurations
-      mkHome = { homeName ? "primary" }: home-manager.lib.homeManagerConfiguration {
+      mkHome = { username, homeName ? "primary" }: home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [
           ./home/base.nix
           ./home/${homeName}.nix
           {
             home = {
-              homeName = homeName;
+		username = username;          
+   # homeName = homeName;
               homeDirectory = "/home/shared";
               stateVersion = "23.11";
             };
@@ -88,7 +89,7 @@
 
       homeConfigurations = {
         "primary" = mkHome {
-          #username = "bosco";
+          username = "bosco";
         };
         # Add other home configurations here
       };
