@@ -49,16 +49,22 @@
 	};
       };
 
+      commonInherits = {
+      inherit (nixpkgs) lib;
+      inherit inputs nixpkgs home-manager;
+      inherit dotfiles;
+    };
+
       # Helper to create home configurations
       mkHome = { username, homeName ? "primary" }: home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [
-          ./home/base.nix
-          ./home/${homeName}.nix
+          ./home/base.nix (commonInherits)
+          ./home/${homeName}.nix (commonInherits)
           {
             home = {
-		username = username;          
-   # homeName = homeName;
+              username = username;
+            # homeName = homeName;
               homeDirectory = "/home/shared";
               stateVersion = "23.11";
             };
