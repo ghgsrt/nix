@@ -18,7 +18,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, nixos-wsl, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, nixos-wsl, dotfiles... }@inputs:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
@@ -59,8 +59,8 @@
       mkHome = { username, homeName ? "primary" }: home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [
-          ./home/base.nix (commonInherits)
-          ./home/${homeName}.nix (commonInherits)
+          ./home/base.nix
+          ./home/${homeName}.nix
           {
             home = {
               username = username;
