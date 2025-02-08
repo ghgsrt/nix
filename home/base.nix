@@ -17,4 +17,12 @@
     ZDOTDIR = "${config.xdg.configHome}/zsh";
     SHARE = "$HOME/.nix-profile/share";
   };
+
+  fonts.fontconfig.enable = true;
+  xdg.dataFile = {
+    "fonts/custom" = {
+      source = "${dotfiles}/fonts/";
+      recursive = true;
+    };
+  };
 }
