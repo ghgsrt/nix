@@ -43,6 +43,14 @@ in
      };
    };
 
+   security.sudo.extraRules = [{
+    groups = [ "wheel" ];
+    commands = [{
+      command = "ALL";
+      options = [ "NOPASSWD" ];
+    }];
+  }];
+
   environment.variables = {
     TERMINAL = "st";
     EDITOR = "nvim";
