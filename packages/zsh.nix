@@ -8,7 +8,7 @@
       owner = "zsh-users";
       repo = "antigen";
       rev = "v2.2.3";
-      sha256 = "0d7wp1l1dcr24qhw03dlkcpnd3r9kxxnqjs386jp876rbc05iskz";  # Replace with correct hash
+      sha256 = "sha256-f+pYAFvZHHSlQUNLbHufKY9mL5u0DcAhjiKzFm4/DQ=";  # Replace with correct hash
     };
 
     installPhase = ''
