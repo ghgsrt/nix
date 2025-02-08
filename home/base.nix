@@ -14,4 +14,12 @@ in {
     HOME_TYPE = "nix";
     HOME_NAME = "base";
   };
+
+  fonts.fontconfig.enable = true;
+  xdg.dataFile = {
+    "fonts/custom" = {
+      source = "${dotfiles}/fonts/";
+      recursive = true;
+    };
+  };
 }

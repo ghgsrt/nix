@@ -70,14 +70,6 @@ in
     XDG_DESKTOP_DIR = "\${HOME}/";
   };
 
-  fonts.fontconfig.enable = true;
-  xdg.dataFile = {
-    "fonts/custom" = {
-      source = "${builtins.getEnv "DOTFILES_DIR"}/fonts/";
-      recursive = true;
-    };
-  };
-
   environment.localBinInPath = true;
 
   environment.systemPackages = with pkgs; [
