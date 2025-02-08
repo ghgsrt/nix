@@ -1,4 +1,4 @@
-{dotfiles, ...}:{
+{config, dotfiles, ...}:{
 
  xdg = {
    configFile."zsh/".source = "${dotfiles}/.config/zsh/";
