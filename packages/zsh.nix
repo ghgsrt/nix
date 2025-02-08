@@ -11,10 +11,13 @@
       sha256 = "sha256-OB/NgpYTlMTHaohis2J/McS+oDHvDXND9FHVNnXjFsM=";  # Replace with correct hash
     };
 
+    dontConfigure = true;
+    dontBuild = true;
+
     installPhase = ''
       echo "Installing antigen..."
       ls -a
-      
+
       mkdir -p $out/share/zsh/plugins/zsh-antigen
       cp bin/antigen.zsh $out/share/zsh/plugins/zsh-antigen/
     '';
