@@ -18,7 +18,7 @@
     # };
   };
 
-  outputs = { self, nixpkgs, home-manager, nixos-wsl, config, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, nixos-wsl, ... }@inputs:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
@@ -58,7 +58,7 @@
           {
             home = {
               username = builtins.getEnv "USER";
-              homeDirectory = "/home/${config.home.username}";
+              homeDirectory = "/home/${builtins.getEnv "USER"}";
               stateVersion = "23.11";
             };
           }
