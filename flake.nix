@@ -58,7 +58,7 @@
           {
             home = {
               username = builtins.getEnv "USER";
-              homeDirectory = builtins.getEnv "HOME";
+              homeDirectory = "/home/${config.home.username}";
               stateVersion = "23.11";
             };
           }
