@@ -13,7 +13,7 @@
 
  xdg.userDirs.desktop = "$HOME/";
 
-  home.sessionVariables = {
-    SHARE = "$HOME/.nix-profile/share";
-  };
+  # home.sessionVariables = {
+  #   SHARE = "$HOME/.nix-profile/share";
+  # };
 }
