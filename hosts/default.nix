@@ -111,7 +111,7 @@ in
 	kmscon = {
 		enable = true;
 		hwRender = true;
-	}
+	};
   };
 
   security.polkit.enable = true;
