@@ -18,7 +18,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, nixos-wsl, dotfiles... }@inputs:
+  outputs = { self, nixpkgs, home-manager, nixos-wsl, dotfiles,... }@inputs:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
@@ -49,12 +49,6 @@
 	};
       };
 
-      commonInherits = {
-      inherit (nixpkgs) lib;
-      inherit inputs nixpkgs home-manager;
-      inherit dotfiles;
-    };
-
       # Helper to create home configurations
       mkHome = { username, homeName ? "primary" }: home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
@@ -65,12 +59,15 @@
             home = {
               username = username;
             # homeName = homeName;
-              homeDirectory = "/home/shared";
+              homeDirectory = "/home/${username}";
               stateVersion = "23.11";
             };
           }
         ];
-        extraSpecialArgs = { inherit inputs; };
+        extraSpecialArgs = { 
+		inherit inputs; 
+		inherit (inputs) dotfiles;	
+	};
       };
     in {
       nixosConfigurations = {
