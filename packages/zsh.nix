@@ -15,5 +15,5 @@
       mkdir -p $out/share/zsh/plugins/zsh-antigen
       cp antigen.zsh $out/share/zsh/plugins/zsh-antigen/
     '';
-  }
+  };
 }
