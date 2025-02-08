@@ -17,6 +17,7 @@ in {
         enable = true;
 		initExtra = ''
 		  export SHARE="$HOME/.nix-profile/share"
+		  export ZDOTDIR="${config.xdg.configHome}/zsh"
 		'';
 
         # oh-my-zsh.enable = true;
