@@ -13,7 +13,8 @@
 
  xdg.userDirs.desktop = "$HOME/";
 
-  # home.sessionVariables = {
-  #   SHARE = "$HOME/.nix-profile/share";
-  # };
+  home.sessionVariables = {
+    ZDOTDIR = "${config.xdg.configHome}/zsh";
+    SHARE = "$HOME/.nix-profile/share";
+  };
 }
