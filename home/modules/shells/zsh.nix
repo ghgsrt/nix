@@ -15,9 +15,6 @@ in {
 
       zsh = {
         enable = true;
-		initExtra = ''
-		  export SHARE="$HOME/.nix-profile/share"
-		'';
 
         # oh-my-zsh.enable = true;
         # enableCompletion = true;
