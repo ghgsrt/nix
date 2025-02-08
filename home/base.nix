@@ -1,4 +1,4 @@
-{config, ...}:
+{config, lib, ...}:
 let
   dotfiles = builtins.getEnv "DOTFILES_DIR";
 in {
