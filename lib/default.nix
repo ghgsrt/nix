@@ -3,6 +3,24 @@
 with lib;
 
 {
+  mkXdgMappings = { dotfiles, user ? null }:
+  if user == null
+  then {
+    # System-wide config in /etc/xdg
+    environment.etc."xdg" = {
+      source = "${dotfiles}";
+    };
+  }
+  else {
+    # User-specific config in ~/.config
+    xdg.configFile = {
+      "." = {
+        source = "${dotfiles}/users/${user}";
+      };
+    };
+  };
+
+
   # Helper function to create a composable home environment module
   mkComposableModule = {
     name,  # Will be used for both module namespace and program enabling

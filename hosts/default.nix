@@ -1,9 +1,11 @@
-{ config, lib, pkgs, inputs, dotfiles, ... }:
-
+{ config, lib, pkgs, inputs, ... }:
+let
+	inherit (import ../lib/default.nix) mkXdgMappings;
+in
 {
-	imports = [
-		../modules/desktop/sway.nix
-	];
+	# imports = [
+	# 	../modules/desktop/sway.nix
+	# ];
 
   time.timeZone = "America/New_York";
 
@@ -36,8 +38,8 @@
 
      "bosco" = {
        isNormalUser = true;
-       extraGroups = ["wheel" "audio" "video"]; # Enable ‘sudo’ for the user.
-       password = "bosco";
+       extraGroups = ["wheel" "audio" "video" "netdev" "lp" "input"]; # Enable ‘sudo’ for the user.
+       password = "";
      };
    };
 
@@ -58,6 +60,14 @@
     XDG_DATA_HOME = "\${HOME}/.local/share";
     XDG_STATE_HOME = "\${HOME}/.local/state";
     XDG_DESKTOP_DIR = "\${HOME}/";
+  };
+
+  fonts.fontconfig.enable = true;
+  xdg.dataFile = {
+    "fonts/custom" = {
+      source = "${builtins.getEnv "DOTFILES_DIR"}/fonts/";
+      recursive = true;
+    };
   };
 
   environment.localBinInPath = true;
@@ -90,7 +100,13 @@
   services = {
     openssh.enable = true;
     dbus.enable = true;
+	kmscon = {
+		enable = true;
+		hwRender = true;
+	}
   };
+
+  security.polkit.enable = true;
 
     # Needed for nix-* commands to use the system's nixpkgs
   environment.etc."channels/nixpkgs".source = inputs.nixpkgs.outPath;
@@ -114,6 +130,4 @@
   };
 
   hardware.enableRedistributableFirmware = true;
-
-  # environment.etc.tmux.source = "${dotfiles}/tmux";
 }

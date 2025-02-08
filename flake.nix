@@ -12,13 +12,13 @@
 
     flake-utils.url = "github:numtide/flake-utils";
 
-    dotfiles = {
-      url = "github:ghgsrt/dotfiles";
-      flake = false;
-    };
+    # dotfiles = {
+    #   url = "github:ghgsrt/dotfiles";
+    #   flake = false;
+    # };
   };
 
-  outputs = { self, nixpkgs, home-manager, nixos-wsl, dotfiles,... }@inputs:
+  outputs = { self, nixpkgs, home-manager, nixos-wsl,... }@inputs:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
@@ -45,29 +45,28 @@
         ] ++ extraModules;
         specialArgs = {
 		inherit inputs;
-	        inherit (inputs) dotfiles;
+	        # inherit (inputs) dotfiles;
 	};
       };
 
       # Helper to create home configurations
-      mkHome = { username, homeName ? "primary" }: home-manager.lib.homeManagerConfiguration {
+      mkHome = { homeName ? "primary" }: home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [
           ./home/base.nix
           ./home/${homeName}.nix
           {
             home = {
-              username = username;
-            # homeName = homeName;
-              homeDirectory = "/home/${username}";
+              username = builtins.getEnv "USER";
+              homeDirectory = builtins.getEnv "HOME";
               stateVersion = "23.11";
             };
           }
         ];
-        extraSpecialArgs = { 
-		inherit inputs; 
-		inherit (inputs) dotfiles;	
-	};
+        extraSpecialArgs = {
+          inherit inputs;
+          # inherit (inputs) dotfiles;
+        };
       };
     in {
       nixosConfigurations = {
@@ -84,16 +83,12 @@
           hostName = "vm";
           isVM = true;
         };
-        thinkpad = mkSystem {
-          hostName = "thinkpad";
-        };
+        thinkpad = mkSystem { hostName = "thinkpad"; };
         # Add other hosts here
       };
 
       homeConfigurations = {
-        "primary" = mkHome {
-          username = "bosco";
-        };
+        "primary" = mkHome { homeName = "primary"; };
         # Add other home configurations here
       };
     };

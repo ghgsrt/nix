@@ -1,11 +1,12 @@
-{ config, lib, pkgs, dotfiles, ... }: {
+{ config, lib, pkgs, ... }: {
   imports = [
-    #./modules/desktop/sway.nix
+    ./modules/desktop/sway.nix
     ./modules/shells/zsh.nix
-    #./modules/shells/starship.nix (dotfiles)
   ];
 
   home.sessionVariables = {
-    TERMINAL = "foot";
+    HOME_NAME = "primary";
+
+    SHELL = "zsh";
   };
 }
