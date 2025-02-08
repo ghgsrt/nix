@@ -18,7 +18,7 @@
     # };
   };
 
-  outputs = { self, nixpkgs, home-manager, nixos-wsl,... }@inputs:
+  outputs = { self, nixpkgs, home-manager, nixos-wsl, config, ... }@inputs:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
