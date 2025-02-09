@@ -23,60 +23,86 @@
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
 
-      # Helper to create system configurations
-      mkSystem = { hostName, extraModules ? [], isVM ? false, defaultHome ? "primary" }: nixpkgs.lib.nixosSystem {
-        inherit system;
-        modules = (if isVM then
-            [./hosts/vm.nix]
-          else
-            [./hosts/base.nix]) ++ [
-#          ./hosts/${hostName}.nix
-          home-manager.nixosModules.home-manager
-          {
-            networking.hostName = hostName;
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              sharedModules = [
-                ./home/${defaultHome}.nix
-              ];
-            };
-          }
-        ] ++ extraModules;
-        specialArgs = {
-		inherit inputs;
-	        # inherit (inputs) dotfiles;
-	};
+      homes = [
+        "base"
+        "primary"
+      ];
+
+      users = {
+        root = { defaultHome = "primary"; };
+        bosco = { defaultHome = "primary"; };
       };
 
-      # Helper to create home configurations
-      mkHome = { homeName ? "primary" }: home-manager.lib.homeManagerConfiguration {
+      # Helper to create standalone home configurations
+      mkHome = { homeName, username }: home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [
           ./home/base.nix
           ./home/${homeName}.nix
           {
             home = {
-              username = builtins.getEnv "USER";
-              homeDirectory = "/home/${builtins.getEnv "USER"}";
+              inherit username;
+              homeDirectory = "/home/${username}";
               stateVersion = "23.11";
             };
           }
         ];
         extraSpecialArgs = {
           inherit inputs;
-          # inherit (inputs) dotfiles;
+        };
+      };
+
+      # Generate all possible home configurations
+      homeConfigurations = nixpkgs.lib.fold
+    (a: b: a // b)
+    {}
+    (builtins.attrValues (builtins.mapAttrs
+      (username: userConfig: builtins.listToAttrs
+        (map
+          (homeName: {
+            name = "${homeName}-${username}";
+            value = mkHome {
+              inherit homeName username;
+            };
+          })
+          homes
+        ))
+      users
+    ));
+
+      # Helper to create system configurations
+      mkSystem = { hostName, extraModules ? [], isVM ? false }: nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = (if isVM then
+            [./hosts/vm.nix]
+          else
+            [./hosts/base.nix]) ++ [
+          home-manager.nixosModules.home-manager
+          {
+            networking.hostName = hostName;
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users = nixpkgs.lib.mapAttrs (username: userConfig: 
+                # Use the already generated home configuration
+                (homeConfigurations."${userConfig.defaultHome}-${username}").config
+              ) users;
+            };
+          }
+        ] ++ extraModules;
+        specialArgs = {
+          inherit inputs;
         };
       };
     in {
+      inherit homeConfigurations;
+
       nixosConfigurations = {
         wsl = mkSystem {
           hostName = "wsl";
           extraModules = [
             nixos-wsl.nixosModules.wsl
-            {
-              wsl.enable = true;
-            }
+            { wsl.enable = true; }
           ];
         };
         vm = mkSystem {
@@ -84,12 +110,6 @@
           isVM = true;
         };
         thinkpad = mkSystem { hostName = "thinkpad"; };
-        # Add other hosts here
-      };
-
-      homeConfigurations = {
-        "primary" = mkHome { homeName = "primary"; };
-        # Add other home configurations here
       };
     };
 }
