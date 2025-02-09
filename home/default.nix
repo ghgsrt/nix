@@ -1,7 +1,5 @@
 {config, lib, ...}:
-let
-  dotfiles = builtins.getEnv "DOTFILES_DIR";
-in {
+{
  xdg.userDirs.desktop = "$HOME/";
 
   # home.activation = {
@@ -18,7 +16,7 @@ in {
   fonts.fontconfig.enable = true;
   xdg.dataFile = {
     "fonts/custom" = {
-      source = "${dotfiles}/fonts/";
+      source = "../dotfiles/fonts/";
       recursive = true;
     };
   };
