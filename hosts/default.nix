@@ -100,9 +100,16 @@ in
   services = {
     openssh.enable = true;
     dbus.enable = true;
-	kmscon = {
+	xserver = {
 		enable = true;
-		hwRender = true;
+
+		displayManager.gdm.enable = true;
+
+		dpi = 96;
+
+		excludePackages = with pkgs; [
+			xterm
+		];
 	};
   };
 
