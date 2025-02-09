@@ -7,5 +7,5 @@ in {
   ];
 
   programs.bash.enable = true;
-  zsh.enable = true;
+  programs.zsh.enable = true;
 }
