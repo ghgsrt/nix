@@ -1,21 +1,5 @@
 {
   "nodes": {
-    "dotfiles": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1739032355,
-        "narHash": "sha256-VologlhoHJfABmMxwyMEXGa+4i481DbB8qedv3IEa+U=",
-        "owner": "ghgsrt",
-        "repo": "dotfiles",
-        "rev": "28b7a90d47e3044badcf77826992d96a3a6fd7e8",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ghgsrt",
-        "repo": "dotfiles",
-        "type": "github"
-      }
-    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -124,7 +108,6 @@
     },
     "root": {
       "inputs": {
-        "dotfiles": "dotfiles",
         "flake-utils": "flake-utils",
         "home-manager": "home-manager",
         "nixos-wsl": "nixos-wsl",
