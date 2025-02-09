@@ -33,32 +33,27 @@
         bosco = { defaultHome = "primary"; };
       };
 
-      # Helper to create standalone home configurations
-      mkHome = { homeName, username }: home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        modules = [
-          ./home
-          ./home/${homeName}.nix
-          {
-            home = {
-              inherit username;
-              homeDirectory = "/home/${username}";
-              stateVersion = "23.11";
-            };
-          }
-        ];
-        extraSpecialArgs = {
-          inherit inputs;
-        };
-      };
-
-      # Generate all home configurations
+      # Generate all possible home configurations
       homeConfigurations = builtins.listToAttrs (
         builtins.concatMap
           (username: map
             (homeName: {
               name = "${homeName}-${username}";
-              value = mkHome { inherit homeName username; };
+              value = home-manager.lib.homeManagerConfiguration {
+                inherit pkgs;
+                modules = [
+                  ./home
+                  ./home/${homeName}.nix
+                  {
+                    home = {
+                      inherit username;
+                      homeDirectory = "/home/${username}";
+                      stateVersion = "23.11";
+                    };
+                  }
+                ];
+                extraSpecialArgs = { inherit inputs; };
+              };
             })
             homes)
           (builtins.attrNames users)
@@ -78,10 +73,7 @@
               useGlobalPkgs = true;
               useUserPackages = true;
               users = nixpkgs.lib.mapAttrs (username: userConfig: 
-                let 
-                  homeName = userConfig.defaultHome;
-                  homeConfig = homeConfigurations."${homeName}-${username}";
-                in { imports = homeConfig.modules; }
+                (homeConfigurations."${userConfig.defaultHome}-${username}").config.home-manager.users.${username}
               ) users;
             };
           }
