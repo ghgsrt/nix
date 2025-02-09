@@ -36,6 +36,7 @@
       # Helper to create standalone home configurations
       mkHome = { homeName, username }: home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
+        inherit system;
         modules = [
           ./home/base.nix
           ./home/${homeName}.nix
