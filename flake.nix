@@ -36,7 +36,6 @@
       # Helper to create standalone home configurations
       mkHome = { homeName, username }: home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-        inherit system;
         modules = [
           ./home/base.nix
           ./home/${homeName}.nix
@@ -85,8 +84,8 @@
               useGlobalPkgs = true;
               useUserPackages = true;
               users = nixpkgs.lib.mapAttrs (username: userConfig: 
-                # Use the already generated home configuration
-                (homeConfigurations."${userConfig.defaultHome}-${username}").config
+                # Instead of using .config, we just need the module configuration
+                { imports = (homeConfigurations."${userConfig.defaultHome}-${username}").modules; }
               ) users;
             };
           }
