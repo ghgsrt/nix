@@ -11,6 +11,7 @@
   home.sessionVariables = {
     HOME_TYPE = "nix";
     HOME_NAME = lib.mkDefault "base";
+    PROFILE = "~/.nix-profile";
   };
 
   fonts.fontconfig.enable = true;
