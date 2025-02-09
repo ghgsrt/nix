@@ -16,7 +16,7 @@
   fonts.fontconfig.enable = true;
   xdg.dataFile = {
     "fonts/custom" = {
-      source = ../dotfiles/fonts;
+      source = "../dotfiles/fonts";
       recursive = true;
     };
   };
