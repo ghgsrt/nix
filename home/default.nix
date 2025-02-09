@@ -4,11 +4,11 @@ let
 in {
  xdg.userDirs.desktop = "$HOME/";
 
-  home.activation = {
-    dotfilesInit = lib.hm.dag.entryAfter ["writeBoundary"] ''
-      ${dotfiles/init.sh}
-    '';
-  };
+  # home.activation = {
+  #   dotfilesInit = lib.hm.dag.entryAfter ["writeBoundary"] ''
+  #     ${dotfiles/init.sh}
+  #   '';
+  # };
 
   home.sessionVariables = {
     HOME_TYPE = "nix";
