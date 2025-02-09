@@ -40,7 +40,7 @@
         {
           home = {
             inherit username;
-            homeDirectory = "/home/${username}";
+            homeDirectory = (if username == "root" then "/root" else "/home/${username}");
             stateVersion = "23.11";
           };
         }
