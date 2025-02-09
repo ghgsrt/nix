@@ -12,7 +12,7 @@ in {
 
   home.sessionVariables = {
     HOME_TYPE = "nix";
-    HOME_NAME = "base";
+    HOME_NAME = lib.mkDefault "base";
   };
 
   fonts.fontconfig.enable = true;
