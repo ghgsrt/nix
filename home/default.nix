@@ -21,10 +21,10 @@
     };
   };
 
-  home.services = {
-    kmscon = {
-      enable = true;
-      hwRender = true;
-    };
-  };
+  # services = {
+  #   kmscon = {
+  #     enable = true;
+  #     hwRender = true;
+  #   };
+  # };
 }
