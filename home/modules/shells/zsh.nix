@@ -6,8 +6,6 @@ in {
 	antigen
   ];
 
-  programs.bash = {
-	enable = true;
-	zsh.enable = true;
-  };
+  programs.bash.enable = true;
+  zsh.enable = true;
 }
