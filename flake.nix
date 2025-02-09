@@ -73,7 +73,7 @@
               useGlobalPkgs = true;
               useUserPackages = true;
               users = nixpkgs.lib.mapAttrs (username: userConfig: 
-                (homeConfigurations."${userConfig.defaultHome}-${username}").config.home-manager.users.${username}
+                (homeConfigurations."${userConfig.defaultHome}-${username}").config
               ) users;
             };
           }
