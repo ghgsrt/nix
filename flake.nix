@@ -33,31 +33,35 @@
         bosco = { defaultHome = "primary"; };
       };
 
+      mkHomeConfig = username: homeName: {
+      imports = [
+        ./home
+        ./home/${homeName}.nix
+        {
+          home = {
+            inherit username;
+            homeDirectory = "/home/${username}";
+            stateVersion = "23.11";
+          };
+        }
+      ];
+    };
+
       # Generate all possible home configurations
-      homeConfigurations = builtins.listToAttrs (
-        builtins.concatMap
-          (username: map
-            (homeName: {
-              name = "${homeName}-${username}";
-              value = home-manager.lib.homeManagerConfiguration {
-                inherit pkgs;
-                modules = [
-                  ./home
-                  ./home/${homeName}.nix
-                  {
-                    home = {
-                      inherit username;
-                      homeDirectory = "/home/${username}";
-                      stateVersion = "23.11";
-                    };
-                  }
-                ];
-                extraSpecialArgs = { inherit inputs; };
-              };
-            })
-            homes)
-          (builtins.attrNames users)
-      );
+       homeConfigurations = builtins.listToAttrs (
+      builtins.concatMap
+        (username: map
+          (homeName: {
+            name = "${homeName}-${username}";
+            value = home-manager.lib.homeManagerConfiguration {
+              inherit pkgs;
+              modules = [(mkHomeConfig username homeName)];
+              extraSpecialArgs = { inherit inputs; };
+            };
+          })
+          homes)
+        (builtins.attrNames users)
+    );
 
       # Helper to create system configurations
       mkSystem = { hostName, extraModules ? [], isVM ? false }: nixpkgs.lib.nixosSystem {
@@ -73,9 +77,7 @@
               useGlobalPkgs = true;
               useUserPackages = true;
               users = nixpkgs.lib.mapAttrs (username: userConfig: 
-                { config, ... }: {
-            imports = homeConfigurations."${userConfig.defaultHome}-${username}".finalModule._file;
-          }
+                mkHomeConfig username userConfig.defaultHome
               ) users;
             };
           }
