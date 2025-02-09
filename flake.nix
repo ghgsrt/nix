@@ -37,7 +37,7 @@
       mkHome = { homeName, username }: home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [
-          ./home/base.nix
+          ./home
           ./home/${homeName}.nix
           {
             home = {
@@ -52,23 +52,17 @@
         };
       };
 
-      # Generate all possible home configurations
-      homeConfigurations = nixpkgs.lib.fold
-    (a: b: a // b)
-    {}
-    (builtins.attrValues (builtins.mapAttrs
-      (username: userConfig: builtins.listToAttrs
-        (map
-          (homeName: {
-            name = "${homeName}-${username}";
-            value = mkHome {
-              inherit homeName username;
-            };
-          })
-          homes
-        ))
-      users
-    ));
+      # Generate all home configurations
+      homeConfigurations = builtins.listToAttrs (
+        builtins.concatMap
+          (username: map
+            (homeName: {
+              name = "${homeName}-${username}";
+              value = mkHome { inherit homeName username; };
+            })
+            homes)
+          (builtins.attrNames users)
+      );
 
       # Helper to create system configurations
       mkSystem = { hostName, extraModules ? [], isVM ? false }: nixpkgs.lib.nixosSystem {
@@ -84,8 +78,10 @@
               useGlobalPkgs = true;
               useUserPackages = true;
               users = nixpkgs.lib.mapAttrs (username: userConfig: 
-                # Instead of using .config, we just need the module configuration
-                { imports = (homeConfigurations."${userConfig.defaultHome}-${username}").modules; }
+                let 
+                  homeName = userConfig.defaultHome;
+                  homeConfig = homeConfigurations."${homeName}-${username}";
+                in { imports = homeConfig.modules; }
               ) users;
             };
           }
