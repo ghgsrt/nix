@@ -7,6 +7,6 @@
   home.sessionVariables = {
     HOME_NAME = "primary";
 
-    SHELL = "zsh";
+    SHELL = lib.mkForce "zsh";
   };
 }
