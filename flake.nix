@@ -35,7 +35,7 @@
 
       mkHomeConfig = username: homeName: {
       imports = [
-        ./home
+        ./home/default.nix
         ./home/${homeName}.nix
         {
           home = {
